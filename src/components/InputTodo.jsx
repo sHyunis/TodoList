@@ -1,6 +1,7 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setInputValue, addTodo } from "../slices/todoSlice";
 import styled from "styled-components";
-import { useTodo } from "../contexts/TodoContext"; // Context 파일 경로 확인
 
 const InputBox = styled.div`
   width: 800px;
@@ -40,7 +41,16 @@ const WriteBtn = styled.button`
 `;
 
 const InputTodo = () => {
-  const { inputValue, handleAddTodoList, setInputValue } = useTodo(); // Context에서 값 가져오기
+  const dispatch = useDispatch();
+  const inputValue = useSelector((state) => state.todo.inputValue);
+
+  const handleInputChange = (e) => {
+    dispatch(setInputValue(e.target.value));
+  };
+
+  const handleAddTodo = () => {
+    dispatch(addTodo());
+  };
 
   return (
     <InputBox>
@@ -48,10 +58,10 @@ const InputTodo = () => {
       <WriteBox>
         <WriteTodo
           type="text"
-          value={inputValue} // 인풋 필드 값 바인딩
-          onChange={(e) => setInputValue(e.target.value)} // 인풋 필드 값 변경
+          value={inputValue}
+          onChange={handleInputChange}
         />
-        <WriteBtn type="button" onClick={handleAddTodoList}>
+        <WriteBtn type="button" onClick={handleAddTodo}>
           Add
         </WriteBtn>
       </WriteBox>
